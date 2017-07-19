@@ -1,3 +1,3 @@
-# pyskel
+# grapheme
 
 has_legs = False
