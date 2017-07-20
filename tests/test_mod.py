@@ -1,4 +1,7 @@
+import os
 from unittest import TestCase
+
+import pytest
 
 import grapheme
 from grapheme import GraphemePropertyGroup
@@ -27,3 +30,30 @@ class GraphemesTest(TestCase):
 
     def test_cr_lf(self):
         self.assertEqual(list(grapheme.graphemes("\u000D\u000A")), ["\u000D\u000A"])
+
+TEST_CASES = []
+
+with open(os.path.join(os.path.dirname(__file__), "../unicode-data/GraphemeBreakTest.txt"), 'r') as f:
+    for line in f.readlines():
+        if line.startswith("#"):
+            continue
+
+        test_data, description = line.split("#")
+
+        expected_graphemes = [
+            "".join([
+                chr(int(char, 16)) for char in cluster.split("×") if char.strip()
+            ])
+            for cluster in test_data.split("÷") if cluster.strip()
+        ]
+
+        input_string = "".join(expected_graphemes)
+        TEST_CASES.append((input_string, expected_graphemes, description))
+
+@pytest.mark.parametrize("input_string,expected_graphemes,description", TEST_CASES)
+def test_default_grapheme_suit(input_string, expected_graphemes, description):
+    print(input_string, expected_graphemes)
+    assert list(grapheme.graphemes(input_string)) == expected_graphemes
+
+
+
