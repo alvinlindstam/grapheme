@@ -20,3 +20,10 @@ class GetGroupTest(TestCase):
 
     def test_get_group(self):
         self.assertEqual(grapheme.get_group("s"), GraphemePropertyGroup.OTHER)
+
+class GraphemesTest(TestCase):
+    def test_simple(self):
+        self.assertEqual(list(grapheme.graphemes("alvin")), list("alvin"))
+
+    def test_cr_lf(self):
+        self.assertEqual(list(grapheme.graphemes("\u000D\u000A")), ["\u000D\u000A"])
