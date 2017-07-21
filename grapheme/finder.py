@@ -114,21 +114,34 @@ class FSM:
 
 
 def graphemes(string):
-    buffer = string[0]
-    _, state = FSM.default(get_group(buffer))
-    print(state )
+    return iter(GraphemeIterator(string))
 
-    for codepoint in string[1:]:
-        current_group = get_group(codepoint)
-        should_break, state = state(current_group)
-        print(should_break, state)
-        if should_break:
-            yield buffer
-            buffer = codepoint
-        else:
-            buffer += codepoint
+class GraphemeIterator:
+    def __init__(self, string):
+        self.buffer = string[0]
+        _, state = FSM.default(get_group(self.buffer))
+        self.state = state
+        self.str_iter = iter(string[1:])
 
-    if buffer:
-        yield buffer
+    def __iter__(self):
+        return self
 
-    raise StopIteration()
+    def __next__(self):
+        for codepoint in self.str_iter:
+
+            should_break, state = self.state(get_group(codepoint))
+            self.state = state
+
+            if should_break:
+                return self._break(codepoint)
+            self.buffer += codepoint
+
+        if self.buffer:
+            return self._break(None)
+
+        raise StopIteration()
+
+    def _break(self, new):
+        old_buffer = self.buffer
+        self.buffer = new
+        return old_buffer

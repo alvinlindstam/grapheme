@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 from unittest import TestCase
 
@@ -27,6 +30,10 @@ class GetGroupTest(TestCase):
 class GraphemesTest(TestCase):
     def test_simple(self):
         self.assertEqual(list(grapheme.graphemes("alvin")), list("alvin"))
+
+    def test_emoji_with_modifier(self):
+        input_str = "\U0001F476\U0001F3FB"
+        self.assertEqual(grapheme.graphemes(input), [input_str])
 
     def test_cr_lf(self):
         self.assertEqual(list(grapheme.graphemes("\u000D\u000A")), ["\u000D\u000A"])
