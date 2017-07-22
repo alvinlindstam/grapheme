@@ -116,8 +116,36 @@ class FSM:
 def graphemes(string):
     return iter(GraphemeIterator(string))
 
+
+def length(string):
+    return sum(1 for _ in GraphemeIterator(string))
+
+def grapheme_lengths(string):
+    return (len(g) for g in graphemes(string))
+
+def substr(string, start, end):
+    if start >= end:
+        return ""
+
+    sum_ = 0
+    start_index = None
+    for grapheme_index, grapheme_length in enumerate(grapheme_lengths(string)):
+        if grapheme_index == start:
+            start_index = sum_
+        elif grapheme_index == end:
+            print(grapheme_index, start_index, sum_)
+            return string[start_index:sum_]
+        sum_ += grapheme_length
+
+    if start_index is not None:
+        return string[start_index:]
+
+    return ""
+
+
 class GraphemeIterator:
     def __init__(self, string):
+        print(string)
         self.buffer = string[0]
         _, state = FSM.default(get_group(self.buffer))
         self.state = state
