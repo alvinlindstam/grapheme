@@ -1,34 +1,80 @@
 grapheme
-======
+========
 
-.. image:: https://travis-ci.org/mapbox/grapheme.svg
-   :target: https://travis-ci.org/mapbox/grapheme
+A Python package for working with user perceived characters. More specifically,
+string manipulation and calculation functions for workong with grapheme cluster
+groups (graphemes) as defined by the `Unicode Standard Annex #29 <http://unicode.org/reports/tr29/>`__.
 
-.. image:: https://coveralls.io/repos/mapbox/grapheme/badge.png
-   :target: https://coveralls.io/r/mapbox/grapheme
+What? Why?
+=========
 
-A skeleton of a Python package with CLI and test suite included.
-   
-.. image:: https://farm4.staticflickr.com/3951/15672691531_3037819613_o_d.png
+Unicode strings are made up of a series of unicode characters, but a unicode character does not
+always map to a user perceived character. Some human perceived characters are represented as two
+or more unicode characters.
 
-Customization quick start
+However, all built in python string functions and string methods work with single unicode characters
+without considering their connection to each other.
+
+.. code-block:: python
+
+    >>> string = 'u̲n̲d̲e̲r̲l̲i̲n̲e̲d̲'
+    >>> len(string)
+    20
+    >>> grapheme.length(string)
+    10
+    >>> string[:3]
+    'u̲n'
+    >>> grapheme.substr(string, 0, 3)
+    'u̲n̲d̲'
+
+This library implements the unicode default rules for extended grapheme clusters, and provides
+a set of functions for string manipulation based on graphemes.
+
+Documentation
+====
+
+todo: add docs
+
+When should I consider graphemes instead of unicode characters?
+====
+
+You should consider working with graphemes over unicode code points when:
+
+* You wish to count characters as perceived by users.
+* You wish to split or truncate text at some user perceived lengths.
+* You wish to split or truncate text without risk of corrupting the characters.
+* Formatting text by length, such as creating text based tables in monospaced fonts
+
+You should work with normal python string functions when:
+
+* You wish to count or split by unicode codepoints for compliance with storage
+  limitations (such as database maximum length)
+* When working with systems that put limits on strings by unicode character
+  lengths
+* You absolutely require the performance benefits of using the built ins
+* If simplicity is more important than accuracy
+
+Performance
+====
+
+todo: make some benchmarks and work with performance fixes.
+
+Examples of grapheme cluster groups
+====
+
+This is not a completet list, but a some examples of when graphemes use multiple
+characters:
+
+* CR+LF
+* Hangul (korean)
+* Emoji with modifiers
+* Combining marks
+* Zero Width Join
+
+Development quick start
 -------------------------
 
-To use grapheme as the start of a new project, do the following, preferably in
-a virtual environment. Clone the repo.
-
-.. code-block:: console
-
-    git clone https://github.com/mapbox/grapheme myproject
-    cd myproject
-
-Replace all occurrences of 'grapheme' with the name of your own project.
-(Note: the commands below require bash, find, and sed and are yet tested only on OS X.)
-
-.. code-block:: console
-
-    if [ -d grapheme ]; then find . -not -path './.git*' -type f -exec sed -i '' -e 's/grapheme/myproject/g' {} + ; fi
-    mv grapheme myproject
+If you wish to contribute or edit this package, create a fork and clone it.
 
 Then install in locally editable (``-e``) mode and run the tests.
 
@@ -36,35 +82,3 @@ Then install in locally editable (``-e``) mode and run the tests.
 
     pip install -e .[test]
     py.test
-
-Finally, give the command line program a try.
-
-.. code-block:: console
-
-    myproject --help
-    myproject 4
-
-To help prevent uncustomized forks of grapheme from being uploaded to PyPI,
-I've configured the setup's upload command to dry run. Make sure to remove
-this configuration from
-`setup.cfg <https://docs.python.org/2/install/index.html#inst-config-syntax>`__
-when you customize grapheme.
-
-Please also note that the Travis-CI and Coveralls badge URLs and links in the README
-contain the string 'mapbox.' You'll need to change this to your own user or organization
-name and turn on the webhooks for your new project.
-
-A post on the Mapbox blog has more information about this project:
-https://www.mapbox.com/blog/grapheme/.
-
-See also
---------
-
-Here are a few other tools for initializing Python projects.
-
-- Paste Script's `paster create <http://pythonpaste.org/script/#paster-create>`__ is
-  one that I've used for a long time.
-- `cookiecutter-pypackage <https://github.com/audreyr/cookiecutter-pypackage>`__ is
-  a Cookiecutter template for a Python package. Cookiecutter supports many languages,
-  includes Travis configuration and much more.
-

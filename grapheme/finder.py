@@ -133,7 +133,6 @@ def substr(string, start, end):
         if grapheme_index == start:
             start_index = sum_
         elif grapheme_index == end:
-            print(grapheme_index, start_index, sum_)
             return string[start_index:sum_]
         sum_ += grapheme_length
 
@@ -145,7 +144,6 @@ def substr(string, start, end):
 
 class GraphemeIterator:
     def __init__(self, string):
-        print(string)
         self.buffer = string[0]
         _, state = FSM.default(get_group(self.buffer))
         self.state = state
