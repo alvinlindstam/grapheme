@@ -3,10 +3,10 @@ grapheme
 
 A Python package for working with user perceived characters. More specifically,
 string manipulation and calculation functions for workong with grapheme cluster
-groups (graphemes) as defined by the `Unicode Standard Annex #29 <http://unicode.org/reports/tr29/>`__.
+groups (graphemes) as defined by the `Unicode Standard Annex #29 <http://unicode.org/reports/tr29/>`_.
 
 What? Why?
-=========
+==========
 
 Unicode strings are made up of a series of unicode characters, but a unicode character does not
 always map to a user perceived character. Some human perceived characters are represented as two
@@ -31,12 +31,12 @@ This library implements the unicode default rules for extended grapheme clusters
 a set of functions for string manipulation based on graphemes.
 
 Documentation
-====
+=============
 
 todo: add docs
 
 When should I consider graphemes instead of unicode characters?
-====
+===============================================================
 
 You should consider working with graphemes over unicode code points when:
 
@@ -55,12 +55,12 @@ You should work with normal python string functions when:
 * If simplicity is more important than accuracy
 
 Performance
-====
+===========
 
 todo: make some benchmarks and work with performance fixes.
 
 Examples of grapheme cluster groups
-====
+===================================
 
 This is not a completet list, but a some examples of when graphemes use multiple
 characters:
@@ -72,7 +72,7 @@ characters:
 * Zero Width Join
 
 Development quick start
--------------------------
+=======================
 
 If you wish to contribute or edit this package, create a fork and clone it.
 
