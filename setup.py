@@ -24,7 +24,7 @@ setup(name='grapheme',
           'click'
       ],
       extras_require={
-          'test': ['pytest'],
+          'test': ['pytest', 'sphinx', 'sphinx-autobuild'],
       },
       entry_points="""
       [console_scripts]
