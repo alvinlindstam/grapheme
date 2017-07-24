@@ -37,7 +37,7 @@ class FSM:
 
         if n is G.PREPEND:
             return True, cls.prepend
-        # todo: add rules
+
         return True, cls.default
 
     @classmethod
@@ -117,15 +117,36 @@ def graphemes(string):
     return iter(GraphemeIterator(string))
 
 
-def length(string):
-    return sum(1 for _ in GraphemeIterator(string))
+def length(string, until=None):
+    if until is None:
+        return sum(1 for _ in GraphemeIterator(string))
 
+    iterator = graphemes(string)
+    count = 0
+    while True:
+        try:
+            if count >= until:
+                break
+            next(iterator)
+        except StopIteration:
+            break
+        else:
+            count += 1
+
+    return count
+
+
+# todo: should probably use an optimized iterator that only deals with code point counts (optimization)
 def grapheme_lengths(string):
     return (len(g) for g in graphemes(string))
+
 
 def substr(string, start, end):
     if start >= end:
         return ""
+
+    if start < 0:
+        raise NotImplementedError("Negative indexing is currently not supported.")
 
     sum_ = 0
     start_index = None

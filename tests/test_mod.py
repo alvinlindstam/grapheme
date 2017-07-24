@@ -42,6 +42,12 @@ class GraphemesTest(TestCase):
         self.assertEqual(grapheme.substr(input_str, 0, 3), " \U0001F476\U0001F3FB ")
         self.assertEqual(grapheme.substr(input_str, 1, 4), "\U0001F476\U0001F3FB a")
         self.assertEqual(grapheme.substr(input_str, 2, 4), " a")
+        self.assertEqual(grapheme.length(input_str), 10)
+        self.assertEqual(grapheme.length(input_str, until=0), 0)
+        self.assertEqual(grapheme.length(input_str, until=1), 1)
+        self.assertEqual(grapheme.length(input_str, until=4), 4)
+        self.assertEqual(grapheme.length(input_str, until=10), 10)
+        self.assertEqual(grapheme.length(input_str, until=11), 10)
 
 TEST_CASES = []
 
