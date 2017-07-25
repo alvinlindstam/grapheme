@@ -23,7 +23,7 @@ setup(name='grapheme',
       extras_require={
           'test': ['pytest', 'sphinx', 'sphinx-autobuild'],
       },
-      classifiers=(
+      classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Programming Language :: Python',
@@ -32,5 +32,5 @@ setup(name='grapheme',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-      ),
+      ],
       )
