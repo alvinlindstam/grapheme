@@ -5,6 +5,12 @@ A Python package for working with user perceived characters. More specifically,
 string manipulation and calculation functions for workong with grapheme cluster
 groups (graphemes) as defined by the `Unicode Standard Annex #29 <http://unicode.org/reports/tr29/>`_.
 
+`documentation <https://grapheme.readthedocs.io/>`_
+
+.. code-block:: console
+
+    pip install grapheme
+
 What? Why?
 ==========
 
