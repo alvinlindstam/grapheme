@@ -52,14 +52,17 @@ def length(string, until=None):
 
 # todo: should probably use an optimized iterator that only deals with code point counts (optimization)
 def grapheme_lengths(string):
-    return (len(g) for g in graphemes(string))
+    """
+    Returns an iterator of number of code points in each grapheme of the string.
+    """
+    return iter(len(g) for g in graphemes(string))
 
 
 def slice(string, start=None, end=None):
     """
     Returns a substring of the given string, counting graphemes instead of codepoints.
 
-    Negative indices is not supported.
+    Negative indices is currently not supported.
 
     >>> string = "tamil நி (ni)"
     >>> string[:7]
