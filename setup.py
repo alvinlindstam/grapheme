@@ -8,10 +8,9 @@ with codecs_open('README.rst', encoding='utf-8') as f:
 
 
 setup(name='grapheme',
-      version='0.0.3',
+      version='0.1.0',
       description=u"Unicode grapheme helpers",
       long_description=long_description,
-      classifiers=[],
       keywords='',
       author=u"Alvin Lindstam",
       author_email='alvin.lindstam@gmail.com',
@@ -20,14 +19,11 @@ setup(name='grapheme',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          'click'
-      ],
+      install_requires=[],
       extras_require={
           'test': ['pytest', 'sphinx', 'sphinx-autobuild'],
       },
-      entry_points="""
-      [console_scripts]
-      grapheme=grapheme.scripts.cli:cli
-      """
+      classifiers=(
+      
+      ),
       )
