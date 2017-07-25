@@ -8,7 +8,7 @@ with codecs_open('README.rst', encoding='utf-8') as f:
 
 
 setup(name='grapheme',
-      version='0.1.0',
+      version='0.2.0',
       description=u"Unicode grapheme helpers",
       long_description=long_description,
       keywords='',
