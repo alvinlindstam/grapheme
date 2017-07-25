@@ -1,8 +1,5 @@
-"""
-alvin finder
-"""
-from grapheme import GraphemePropertyGroup as G
-from grapheme import get_group
+from grapheme.grapheme_property_group import GraphemePropertyGroup as G
+from grapheme.grapheme_property_group import get_group
 
 
 class FSM:
