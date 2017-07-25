@@ -115,17 +115,20 @@ class FSM:
 
 class GraphemeIterator:
     def __init__(self, string):
-        self.buffer = string[0]
-        _, state = FSM.default(get_group(self.buffer))
-        self.state = state
-        self.str_iter = iter(string[1:])
+        self.str_iter = iter(string)
+        try:
+            self.buffer = next(self.str_iter)
+        except StopIteration:
+            self.buffer = None
+        else:
+            _, state = FSM.default(get_group(self.buffer))
+            self.state = state
 
     def __iter__(self):
         return self
 
     def __next__(self):
         for codepoint in self.str_iter:
-
             should_break, state = self.state(get_group(codepoint))
             self.state = state
 

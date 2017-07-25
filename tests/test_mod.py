@@ -23,6 +23,9 @@ class GetGroupTest(TestCase):
         self.assertEqual(get_group("s"), GraphemePropertyGroup.OTHER)
 
 class GraphemesTest(TestCase):
+    def test_empty(self):
+        self.assertEqual(list(grapheme.graphemes("")), [])
+
     def test_simple(self):
         self.assertEqual(list(grapheme.graphemes("alvin")), list("alvin"))
 
