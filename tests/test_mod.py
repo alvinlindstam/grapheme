@@ -54,6 +54,21 @@ class GraphemesTest(TestCase):
         self.assertEqual(grapheme.length(input_str, until=10), 10)
         self.assertEqual(grapheme.length(input_str, until=11), 10)
 
+    def test_contains(self):
+        input_str = " \U0001F476\U0001F3FB ascii \u000D\u000A"
+
+        self.assertFalse(grapheme.contains(input_str, " \U0001F476"))
+        self.assertFalse(grapheme.contains(input_str, "\u000D"))
+        self.assertFalse(grapheme.contains(input_str, "\U0001F3FB"))
+        self.assertTrue(grapheme.contains(input_str, ""))
+
+        graphemes = list(grapheme.graphemes(input_str))
+        for grapheme_ in graphemes:
+            self.assertTrue(grapheme.contains(input_str, grapheme_))
+
+        for i in range(len(graphemes) - 1):
+            self.assertTrue(grapheme.contains(input_str, "".join(graphemes[i:i+2])))
+
 TEST_CASES = []
 
 with open(os.path.join(os.path.dirname(__file__), "../unicode-data/GraphemeBreakTest.txt"), 'r') as f:
