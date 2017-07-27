@@ -10,7 +10,7 @@ long_ascii_string = random_ascii_string(1000)
 
 statements = [
     ("len(long_ascii_string)", 1000),
-    ("grapheme.length(long_ascii_string)", 500),
+    ("grapheme.length(long_ascii_string)", 1000),
 ]
 for statement, n in statements:
     result = timeit.timeit(statement, setup="from __main__ import long_ascii_string; import grapheme", number=n) / 100
