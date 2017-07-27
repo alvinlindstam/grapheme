@@ -2,7 +2,6 @@ from random import choice
 from string import ascii_lowercase
 import timeit
 
-import grapheme
 
 def random_ascii_string(n):
     return "".join(choice(ascii_lowercase) for i in range(n))

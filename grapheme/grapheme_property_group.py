@@ -92,7 +92,6 @@ class LeafNode:
     def get_value(self, _key):
         return self.group
 
-# todo: should fix more efficient group lookup than this naive approach
 with open(os.path.join(os.path.dirname(__file__), "data/grapheme_break_property.json"), 'r') as f:
     data = json.load(f)
 
@@ -108,11 +107,14 @@ with open(os.path.join(os.path.dirname(__file__), "data/grapheme_break_property.
     RANGE_TREE = None
     for key, value in data.items():
         for range_ in value["ranges"]:
-            new_node = LeafNode(
-                int(range_[0], 16),
-                int(range_[1], 16),
-                GraphemePropertyGroup(key)
-            )
+            min_ = int(range_[0], 16)
+            max_ = int(range_[1], 16)
+            group = GraphemePropertyGroup(key)
+            if max_ - min_ < 20:
+                for i in range(min_, max_ + 1):
+                    SINGLE_CHAR_MAPPINGS[i] = group
+                continue
+            new_node = LeafNode( min_, max_, group)
             if RANGE_TREE:
                 new_subtree = RANGE_TREE.add(new_node)
                 if new_subtree:
@@ -121,3 +123,5 @@ with open(os.path.join(os.path.dirname(__file__), "data/grapheme_break_property.
                 RANGE_TREE = ContainerNode([new_node])
 
     del data
+
+print(len(SINGLE_CHAR_MAPPINGS))
