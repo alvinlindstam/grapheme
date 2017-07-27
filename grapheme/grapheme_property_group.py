@@ -30,9 +30,9 @@ def get_group(char):
 
 
 def get_group_ord(char):
-    for char_set, group in SINGLE_CHAR_MAPPINGS:
-        if char in char_set:
-            return group
+    group = SINGLE_CHAR_MAPPINGS.get(char, None)
+    if group:
+        return group
 
     return RANGE_TREE.get_value(char) or GraphemePropertyGroup.OTHER
 
@@ -98,12 +98,12 @@ with open(os.path.join(os.path.dirname(__file__), "data/grapheme_break_property.
 
     assert len(data) == len(GraphemePropertyGroup) - 1
 
-    SINGLE_CHAR_MAPPINGS = [
-        (
-            set(int(char, 16) for char in value["single_chars"]),
-            GraphemePropertyGroup(key)
-        ) for key, value in data.items()
-    ]
+    SINGLE_CHAR_MAPPINGS = {}
+
+    for key, value in data.items():
+        group = GraphemePropertyGroup(key)
+        for char in value["single_chars"]:
+            SINGLE_CHAR_MAPPINGS[int(char, 16)] = group
 
     RANGE_TREE = None
     for key, value in data.items():
