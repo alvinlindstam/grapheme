@@ -19,7 +19,8 @@ def length(string, until=None):
     Returns the number of graphemes in the string.
 
     Note that this functions needs to traverse the full string to calculate the length,
-    unlike `len(string)`.
+    unlike `len(string)` and it's time consumption is linear to the length of the string
+    (up to the `until` value).
 
     Only counts up to the `until` argument, if given. This is useful when testing
     the length of a string against some limit and the excess length is not interesting.
@@ -104,6 +105,11 @@ def contains(string, substring):
     This differs from the normal python `in` operator, since the python operator will return
     true if the sequence of codepoints are withing the other string without considering
     grapheme boundaries.
+
+    Performance notes: Very fast if `substring not in string`, since that also means that
+    the same graphemes can not be in the two strings. Otherwise this function has linear time
+    complexity in relation to the string length. It will traverse the sequence of graphemes until
+    a match is found, so it will generally perform better for grapheme sequences that match early.
 
     >>> "🇸🇪" in "🇪🇸🇪🇪"
     True

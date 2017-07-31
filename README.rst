@@ -39,7 +39,7 @@ a set of functions for string manipulation based on graphemes.
 Documentation
 =============
 
-todo: add docs
+See `<https://grapheme.readthedocs.io/en/latest/>`_.
 
 When should I consider graphemes instead of unicode characters?
 ===============================================================
@@ -57,18 +57,49 @@ You should work with normal python string functions when:
   limitations (such as database maximum length)
 * When working with systems that put limits on strings by unicode character
   lengths
-* You absolutely require the performance benefits of using the built ins
+* When you prioritize performance over correctness (see performance notes below)
+* When working with very long strings (see performance notes below)
 * If simplicity is more important than accuracy
 
 Performance
 ===========
 
-todo: make some benchmarks and work with performance fixes.
+Calculating graphemes require traversing the string and checking each character
+against a set of rules and the previous character(s). Because of this, all
+functions in this module will scale linearly to the string length.
+
+Whenever possible, they will only traverse the string for as long as needed and return
+early as soon as the requested output is generated. For example, the `grapheme.slice`
+function only has to traverse the string until the last requested grapheme is found, and
+does not care about the rest of the string.
+
+You should probably only use this package for testing/manipulating fairly short strings
+or with the beginning of long strings.
+
+When testing with a string of 10 000 ascii characters, and a 3.1 GHz processor, the execution
+time is for some possible calls is roughly:
+
+================================================================  ==========================
+Code                                                              Approximate execution time
+================================================================  ==========================
+`len(long_ascii_string)`                                          8.1e-10 seconds
+`grapheme.length(long_ascii_string)`                              1.5e-04 seconds
+`grapheme.length(long_ascii_string, 500)`                         8.7e-06 seconds
+`long_ascii_string[0:100]`                                        1.3e-09 seconds
+`grapheme.slice(long_ascii_string, 0, 100)`                       2.5e-06 seconds
+`long_ascii_string[:100] in long_ascii_string`                    4.0e-09 seconds
+`grapheme.contains(long_ascii_string, long_ascii_string[:100])`   3.9e-06 seconds
+`long_ascii_string[-100:] in long_ascii_string`                   2.1e-07 seconds
+`grapheme.contains(long_ascii_string, long_ascii_string[-100:])`  1.9e-04 seconds
+================================================================  ==========================
+
+Execution times may improve in later releases, but calculating graphemes is and will continue
+to be notably slower than just counting unicode code points.
 
 Examples of grapheme cluster groups
 ===================================
 
-This is not a completet list, but a some examples of when graphemes use multiple
+This is not a complete list, but a some examples of when graphemes use multiple
 characters:
 
 * CR+LF
