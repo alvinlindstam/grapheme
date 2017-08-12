@@ -196,7 +196,6 @@ def safe_split_index(string, max_len):
     'tamil '
     >>> string[i:]
     'நி (ni)'
-
     """
     last_index = get_last_certain_break_index(string, max_len)
     for l in grapheme_lengths(string[last_index:]):
