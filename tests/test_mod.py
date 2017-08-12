@@ -5,6 +5,7 @@ import os
 from unittest import TestCase
 
 import pytest
+from grapheme.api import safe_split_index
 
 from grapheme.grapheme_property_group import GraphemePropertyGroup, get_group
 import grapheme
@@ -93,6 +94,17 @@ def test_default_grapheme_suit(input_string, expected_graphemes, description):
     print(input_string, expected_graphemes)
     assert list(grapheme.graphemes(input_string)) == expected_graphemes
     assert grapheme.length(input_string) == len(expected_graphemes)
+
+    # Verify that we can always find the last grapheme index
+    cur_len = 0
+    cur_grapheme_break_index = 0
+    for g in expected_graphemes:
+        next_limit = cur_grapheme_break_index + len(g)
+        for _c in g:
+            cur_len += 1
+            if cur_len == next_limit:
+                cur_grapheme_break_index = next_limit
+            assert safe_split_index(input_string, cur_len) == cur_grapheme_break_index
 
 
 
