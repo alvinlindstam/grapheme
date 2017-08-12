@@ -143,6 +143,37 @@ def contains(string, substring):
         return str_sub_part == substr_graphemes
 
 
+def startswith(string, prefix):
+    """
+    Like str.startswith, but also checks that the string starts with the given prefixes sequence of graphemes.
+
+    str.startswith may return true for a prefix that is not visually represented as a prefix if a grapheme cluster
+    is continued after the prefix ends.
+
+    >>> grapheme.startswith("✊🏾", "✊")
+    False
+    >>> "✊🏾".startswith("✊")
+    True
+    """
+    return string.startswith(prefix) and safe_split_index(string, len(prefix)) == len(prefix)
+
+
+def endswith(string, suffix):
+    """
+    Like str.endswith, but also checks that the string ends with the given prefixes sequence of graphemes.
+
+    str.endswith may return true for a suffix that is not visually represented as a suffix if a grapheme cluster
+    is initiated before the suffix starts.
+
+    >>> grapheme.endswith("🏳️‍🌈", "🌈")
+    False
+    >>> "🏳️‍🌈".endswith("🌈")
+    True
+    """
+    expected_index = len(string) - len(suffix)
+    return string.endswith(suffix) and safe_split_index(string, expected_index) == expected_index
+
+
 def safe_split_index(string, max_len):
     """
     Returns the highest index up to `max_len` at which the given string can be sliced, without breaking a grapheme.
