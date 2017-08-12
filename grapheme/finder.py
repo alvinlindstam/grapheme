@@ -1,3 +1,5 @@
+from enum import Enum
+
 from grapheme.grapheme_property_group import GraphemePropertyGroup as G
 from grapheme.grapheme_property_group import get_group
 
@@ -111,6 +113,70 @@ class FSM:
         if n is G.REGIONAL_INDICATOR:
             return False, cls.default
         return cls.default(n)
+
+class BreakPossibility(Enum):
+    CERTAIN = "certain"
+    POSSIBLE = "possible"
+    NO_BREAK = "nobreak"
+
+
+def get_break_possibility(a, b):
+    # Probably most common, included as short circuit before checking all else
+    if a is G.OTHER and b is G.OTHER:
+        return BreakPossibility.CERTAIN
+
+    assert isinstance(a, G)
+    assert isinstance(b, G)
+
+    # Only break if preceeded by an uneven number of REGIONAL_INDICATORS
+    if a is G.REGIONAL_INDICATOR and b is G.REGIONAL_INDICATOR:
+        return BreakPossibility.POSSIBLE
+
+    # Only if preceeded by E_BASE or EBG
+    if a is G.EXTEND and b is G.E_MODIFIER:
+        return BreakPossibility.POSSIBLE
+
+    if a is G.CR and b is G.LF:
+        return BreakPossibility.NO_BREAK
+
+    if a in [G.CONTROL, G.CR, G.LF] or b in [G.CONTROL, G.CR, G.LF]:
+        return BreakPossibility.CERTAIN
+
+    if a is G.L and b in [G.L, G.V, G.LV, G.LVT]:
+        return BreakPossibility.NO_BREAK
+
+    if a in [G.LV, G.V] and b in [G.V, G.T]:
+        return BreakPossibility.NO_BREAK
+
+    if a in [G.LVT, G.T] and b is G.T:
+        return BreakPossibility.NO_BREAK
+
+    if b in [G.EXTEND, G.ZWJ, G.SPACING_MARK] or a is G.PREPEND:
+        return BreakPossibility.NO_BREAK
+
+    if a in [G.E_BASE, G.E_BASE_GAZ] and b is G.E_MODIFIER:
+        return BreakPossibility.NO_BREAK
+
+    if a is G.ZWJ and b in [G.GLUE_AFTER_ZWJ, G.E_BASE_GAZ]:
+        return BreakPossibility.NO_BREAK
+
+    # everything else, assumes all other rules are included above
+    return BreakPossibility.CERTAIN
+
+
+def get_last_certain_break_index(string, index):
+    if index >= len(string):
+        return len(string)
+
+    prev = get_group(string[index])
+    while True:
+        if index <= 0:
+            return 0
+        index -= 1
+        cur = get_group(string[index])
+        if get_break_possibility(cur, prev) == BreakPossibility.CERTAIN:
+            return index + 1
+        prev = cur
 
 
 class GraphemeIterator:
