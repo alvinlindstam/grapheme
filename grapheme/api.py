@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from grapheme.finder import GraphemeIterator, get_last_certain_break_index
 
+
+UNICODE_VERSION = "11.0.0"
+
+
 def graphemes(string):
     """
     Returns an iterator of all graphemes of given string.
