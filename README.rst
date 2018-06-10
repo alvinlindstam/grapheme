@@ -2,7 +2,7 @@ grapheme
 ========
 
 A Python package for working with user perceived characters. More specifically,
-string manipulation and calculation functions for workong with grapheme cluster
+string manipulation and calculation functions for working with grapheme cluster
 groups (graphemes) as defined by the `Unicode Standard Annex #29 <http://unicode.org/reports/tr29/>`_.
 
 `documentation <https://grapheme.readthedocs.io/>`_
@@ -79,7 +79,7 @@ You should probably only use this package for testing/manipulating fairly short 
 or with the beginning of long strings.
 
 When testing with a string of 10 000 ascii characters, and a 3.1 GHz processor, the execution
-time is for some possible calls is roughly:
+time for some possible calls is roughly:
 
 ================================================================  ==========================
 Code                                                              Approximate execution time
