@@ -17,11 +17,8 @@ class GraphemePropertyGroup(Enum):
     T = "T"
     LV = "LV"
     LVT = "LVT"
-    E_BASE = "E_Base"
-    E_MODIFIER = "E_Modifier"
     ZWJ = "ZWJ"
-    GLUE_AFTER_ZWJ = "Glue_After_Zwj"
-    E_BASE_GAZ = "E_Base_GAZ"
+    EXTENDED_PICTOGRAPHIC = "Extended_Pictographic"
 
     OTHER = "Other"
 
