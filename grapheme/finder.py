@@ -16,13 +16,10 @@ class FSM:
         if n in [G.LF, G.CONTROL]:
             return True, cls.lf_or_control
 
-        if n is G.ZWJ:
-            return False, cls.zwj
-
-        if n in [G.EXTEND, G.SPACING_MARK]:
+        if n in [G.EXTEND, G.SPACING_MARK, G.ZWJ]:
             return False, cls.default
 
-        if n in [G.E_BASE, G.E_BASE_GAZ]:
+        if n is G.EXTENDED_PICTOGRAPHIC:
             return True, cls.emoji
 
         if n is G.REGIONAL_INDICATOR:
@@ -95,15 +92,13 @@ class FSM:
     def emoji(cls, n):
         if n is G.EXTEND:
             return False, cls.emoji
-        if n is G.E_MODIFIER:
-            return False, cls.default
+        if n is G.ZWJ:
+            return False, cls.emoji_zjw
         return cls.default(n)
 
     @classmethod
-    def zwj(cls, n):
-        if n is G.GLUE_AFTER_ZWJ:
-            return False, cls.default
-        if n is G.E_BASE_GAZ:
+    def emoji_zjw(cls, n):
+        if n is G.EXTENDED_PICTOGRAPHIC:
             return False, cls.emoji
         return cls.default(n)
 
@@ -129,36 +124,41 @@ def get_break_possibility(a, b):
     assert isinstance(b, G)
 
     # Only break if preceeded by an uneven number of REGIONAL_INDICATORS
+    # sot (RI RI)* RI × RI
+    # [ ^ RI] (RI RI) * RI    ×    RI
     if a is G.REGIONAL_INDICATOR and b is G.REGIONAL_INDICATOR:
         return BreakPossibility.POSSIBLE
 
-    # Only if preceeded by E_BASE or EBG
-    if a is G.EXTEND and b is G.E_MODIFIER:
-        return BreakPossibility.POSSIBLE
-
-    if a is G.CR and b is G.LF:
-        return BreakPossibility.NO_BREAK
-
+    # (Control | CR | LF) ÷
+    #  ÷ (Control | CR | LF)
     if a in [G.CONTROL, G.CR, G.LF] or b in [G.CONTROL, G.CR, G.LF]:
-        return BreakPossibility.CERTAIN
+        # CR × LF
+        if a is G.CR and b is G.LF:
+            return BreakPossibility.NO_BREAK
+        else:
+            return BreakPossibility.CERTAIN
 
+    # L × (L | V | LV | LVT)
     if a is G.L and b in [G.L, G.V, G.LV, G.LVT]:
         return BreakPossibility.NO_BREAK
 
+    # (LV | V) × (V | T)
     if a in [G.LV, G.V] and b in [G.V, G.T]:
         return BreakPossibility.NO_BREAK
 
+    # (LVT | T)    ×    T
     if a in [G.LVT, G.T] and b is G.T:
         return BreakPossibility.NO_BREAK
 
+    # × (Extend | ZWJ)
+    # × SpacingMark
+    # Prepend ×
     if b in [G.EXTEND, G.ZWJ, G.SPACING_MARK] or a is G.PREPEND:
         return BreakPossibility.NO_BREAK
 
-    if a in [G.E_BASE, G.E_BASE_GAZ] and b is G.E_MODIFIER:
-        return BreakPossibility.NO_BREAK
-
-    if a is G.ZWJ and b in [G.GLUE_AFTER_ZWJ, G.E_BASE_GAZ]:
-        return BreakPossibility.NO_BREAK
+    # \p{Extended_Pictographic} Extend* ZWJ × \p{Extended_Pictographic}
+    if a is G.ZWJ and b is G.EXTENDED_PICTOGRAPHIC:
+        return BreakPossibility.POSSIBLE
 
     # everything else, assumes all other rules are included above
     return BreakPossibility.CERTAIN

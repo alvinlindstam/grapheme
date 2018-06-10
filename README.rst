@@ -11,6 +11,8 @@ groups (graphemes) as defined by the `Unicode Standard Annex #29 <http://unicode
 
     pip install grapheme
 
+The currently supported version of Unicode: 11.0.0
+
 What? Why?
 ==========
 

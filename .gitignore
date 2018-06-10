@@ -55,3 +55,7 @@ target/
 
 # OS X
 .DS_Store
+
+# Other
+.python-version
+.pytest_cache
