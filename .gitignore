@@ -58,3 +58,4 @@ target/
 
 # Other
 .python-version
+.pytest_cache
