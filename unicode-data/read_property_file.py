@@ -55,7 +55,22 @@ with open(os.path.join(dir_path, EMOJI_DATA_FILE), "r") as file:
         else:
             chardata[group_name]["ranges"].append((start, end))
 
-        # print((start, end, group_name))
-print(chardata.keys())
+
+def to_int(hex_):
+    return int(hex_, 16)
+
+
+# Join adjacent ranges.
+for group in chardata.values():
+    last_max = None
+    ranges = []
+    for min_, max_ in list(sorted(group["ranges"], key=lambda range: to_int(range[0]))):
+        if last_max and last_max + 1 == to_int(min_):
+            ranges[-1][-1] = max_
+        else:
+            ranges.append([min_, max_])
+        last_max = to_int(max_)
+    group["ranges"] = ranges
+
 with open(os.path.join(dir_path, BREAK_PROPERTY_JSON_FILE), "w") as out_file:
     out_file.write(json.dumps(chardata, indent=2))
