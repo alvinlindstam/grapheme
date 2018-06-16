@@ -76,7 +76,16 @@ for group in chardata.values():
             ranges.append([min_, max_])
         last_max = to_int(max_)
 
-        for prev in range(min_int-1, 0, -1):
+        for next_ in range(last_max + 1, last_max+100):
+            hex_ = to_hex(next_)
+            if hex_ in group["single_chars"]:
+                group["single_chars"].remove(hex_)
+                ranges[-1][1] = hex_
+                last_max = next_
+            else:
+                break
+
+        for prev in range(min_int - 1, 0, -1):
             hex_ = to_hex(prev)
             if hex_ in group["single_chars"]:
                 group["single_chars"].remove(hex_)
