@@ -35,9 +35,9 @@ with open(os.path.join(dir_path, BREAK_PROPERTY_FILE), "r") as file:
         (start, _, end, group_name) = match.groups()
 
         if end is None:
-            chardata[group_name]["single_chars"].append(start)
+            chardata[group_name]["single_chars"].append(int(start, 16))
         else:
-            chardata[group_name]["ranges"].append((start, end))
+            chardata[group_name]["ranges"].append((int(start, 16), int(end, 16)))
 
 with open(os.path.join(dir_path, EMOJI_DATA_FILE), "r") as file:
     for line in file:
@@ -51,45 +51,33 @@ with open(os.path.join(dir_path, EMOJI_DATA_FILE), "r") as file:
             continue
 
         if end is None:
-            chardata[group_name]["single_chars"].append(start)
+            chardata[group_name]["single_chars"].append(int(start, 16))
         else:
-            chardata[group_name]["ranges"].append((start, end))
-
-
-def to_int(hex_):
-    return int(hex_, 16)
-
-
-def to_hex(int_):
-    return "{0:x}".format(int_).upper()
-
+            chardata[group_name]["ranges"].append((int(start, 16), int(end, 16)))
 
 # Join adjacent ranges.
 for group in chardata.values():
     last_max = None
     ranges = []
-    for min_, max_ in list(sorted(group["ranges"], key=lambda range: to_int(range[0]))):
-        min_int = to_int(min_)
-        if last_max and last_max + 1 == min_int:
+    for min_, max_ in list(sorted(group["ranges"])):
+        if last_max and last_max + 1 == min_:
             ranges[-1][1] = max_
         else:
             ranges.append([min_, max_])
-        last_max = to_int(max_)
+        last_max = max_
 
         for next_ in range(last_max + 1, last_max+100):
-            hex_ = to_hex(next_)
-            if hex_ in group["single_chars"]:
-                group["single_chars"].remove(hex_)
-                ranges[-1][1] = hex_
+            if next_ in group["single_chars"]:
+                group["single_chars"].remove(next_)
+                ranges[-1][1] = next_
                 last_max = next_
             else:
                 break
 
-        for prev in range(min_int - 1, 0, -1):
-            hex_ = to_hex(prev)
-            if hex_ in group["single_chars"]:
-                group["single_chars"].remove(hex_)
-                ranges[-1][0] = hex_
+        for prev in range(min_ - 1, 0, -1):
+            if prev in group["single_chars"]:
+                group["single_chars"].remove(prev)
+                ranges[-1][0] = prev
             else:
                 break
     group["ranges"] = ranges

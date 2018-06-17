@@ -104,13 +104,13 @@ with open(os.path.join(os.path.dirname(__file__), "data/grapheme_break_property.
     for key, value in data.items():
         group = GraphemePropertyGroup(key)
         for char in value["single_chars"]:
-            SINGLE_CHAR_MAPPINGS[int(char, 16)] = group
+            SINGLE_CHAR_MAPPINGS[char] = group
 
     RANGE_TREE = None
     for key, value in data.items():
         for range_ in value["ranges"]:
-            min_ = int(range_[0], 16)
-            max_ = int(range_[1], 16)
+            min_ = range_[0]
+            max_ = range_[1]
             group = GraphemePropertyGroup(key)
             if max_ - min_ < 20:
                 for i in range(min_, max_ + 1):
