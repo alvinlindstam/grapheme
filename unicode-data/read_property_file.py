@@ -39,6 +39,7 @@ with open(os.path.join(dir_path, BREAK_PROPERTY_FILE), "r") as file:
         else:
             chardata[group_name]["ranges"].append((int(start, 16), int(end, 16)))
 
+# Find characters with Extended_Pictographic flag from the emoji data file
 with open(os.path.join(dir_path, EMOJI_DATA_FILE), "r") as file:
     for line in file:
         match = pattern.search(line)
@@ -55,32 +56,29 @@ with open(os.path.join(dir_path, EMOJI_DATA_FILE), "r") as file:
         else:
             chardata[group_name]["ranges"].append((int(start, 16), int(end, 16)))
 
-# Join adjacent ranges.
+
 for group in chardata.values():
-    last_max = None
+    single_chars = group["single_chars"]
     ranges = []
-    for min_, max_ in list(sorted(group["ranges"])):
+    last_max = None
+    for min_, max_ in sorted(group["ranges"]):
+        # Extend range with adjacent single chars
+        while min_ - 1 in single_chars:
+            min_ -= 1
+            single_chars.remove(min_)
+
+        while max_ + 1 in single_chars:
+            max_ += 1
+            single_chars.remove(max_)
+
+        # Join adjacent ranges.
         if last_max and last_max + 1 == min_:
             ranges[-1][1] = max_
         else:
             ranges.append([min_, max_])
         last_max = max_
-
-        for next_ in range(last_max + 1, last_max+100):
-            if next_ in group["single_chars"]:
-                group["single_chars"].remove(next_)
-                ranges[-1][1] = next_
-                last_max = next_
-            else:
-                break
-
-        for prev in range(min_ - 1, 0, -1):
-            if prev in group["single_chars"]:
-                group["single_chars"].remove(prev)
-                ranges[-1][0] = prev
-            else:
-                break
     group["ranges"] = ranges
+
 
 with open(os.path.join(dir_path, BREAK_PROPERTY_JSON_FILE), "w") as out_file:
     out_file.write(json.dumps(chardata, indent=2))
