@@ -5,3 +5,11 @@ process-data-files:
 .PHONY: build-release
 build-release:
 	python setup.py sdist
+
+.PHONY: release-to-test
+release-to-test:
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+.PHONY: release-to-prod
+release-to-prod:
+	twine upload dist/*
