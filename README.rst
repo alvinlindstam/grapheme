@@ -133,7 +133,7 @@ The steps necessary for this:
    `Annex #29 <http://unicode.org/reports/tr29/>`_ (see modifications).
 2. Download the `data files <http://www.unicode.org/Public/>`_ from unicode into the unicode-data folder.
    For the given version, some are in `ucd` and some are in `ucd/auxiliary`.
-3. Run `read_property_file.py` to parse those files (will update the
+3. Run `make process-data-files` to parse those files (will update the
    `grapheme_break_property.json` file).
 4. Update the unicode version in the documentation and in the source code.
 5. Bump the version.
