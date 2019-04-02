@@ -11,7 +11,7 @@ groups (graphemes) as defined by the `Unicode Standard Annex #29 <http://unicode
 
     pip install grapheme
 
-The currently supported version of Unicode: 12.0.0
+The currently supported version of Unicode: 12.0.0 (12.1.0 has/will add a single codepoint, not affecting graphemes).
 
 What? Why?
 ==========
