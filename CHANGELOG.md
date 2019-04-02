@@ -1,3 +1,8 @@
+## 0.5.0
+Added support for Unicode 12.
+
+No API changes
+
 ## 0.4.0
 Added support for Unicode 11.
 
