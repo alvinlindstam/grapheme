@@ -21,7 +21,7 @@ setup(name='grapheme',
       zip_safe=False,
       install_requires=[],
       extras_require={
-          'test': ['pytest', 'sphinx', 'sphinx-autobuild'],
+          'test': ['pytest', 'sphinx', 'sphinx-autobuild', 'wheel', 'twine']
       },
       classifiers=[
         'Development Status :: 3 - Alpha',
