@@ -121,3 +121,19 @@ Then install in locally editable (``-e``) mode and run the tests.
 
     pip install -e .[test]
     py.test
+
+Unicode version upgrade
+-----------------------
+
+The library will issue a new release for each new unicode version.
+
+The steps necessary for this:
+
+1. Verify that there has been no material changes to the rulesets in Unicode
+   `Annex #29 <http://unicode.org/reports/tr29/>`_ (see modifications).
+2. Download the `data files <http://www.unicode.org/Public/>`_ from unicode into the unicode-data folder.
+   For the given version, some are in `ucd` and some are in `ucd/auxiliary`.
+3. Run `read_property_file.py` to parse those files (will update the
+   `grapheme_break_property.json` file).
+4. Update the unicode version in the documentation and in the source code.
+5. Bump the version.
