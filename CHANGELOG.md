@@ -1,6 +1,7 @@
 ## 0.6.0
 Added support for Unicode 13.
 
+Drops support for python 3.4 & 3.5. Now tested on python 3.6 - 3.8.
 No API changes
 
 ## 0.5.0
