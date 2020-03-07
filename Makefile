@@ -4,6 +4,7 @@ process-data-files:
 
 .PHONY: build-release
 build-release:
+	rm dist/*
 	python setup.py sdist
 
 .PHONY: release-to-test
