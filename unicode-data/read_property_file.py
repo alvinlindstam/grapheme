@@ -8,7 +8,7 @@ BREAK_PROPERTY_FILE = "GraphemeBreakProperty.txt"
 EMOJI_DATA_FILE = "emoji-data.txt"
 BREAK_PROPERTY_JSON_FILE = "../grapheme/data/grapheme_break_property.json"
 
-pattern = re.compile("^([0-9A-F]+)(\.\.([0-9A-F]+))?\s+;\s*(\w*)\s*#")
+pattern = re.compile(r"^([0-9A-F]+)(\.\.([0-9A-F]+))?\s+;\s*(\w*)\s*#")
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
