@@ -94,7 +94,7 @@ class LeafNode:
     def get_value(self, _key):
         return self.group
 
-with open(os.path.join(os.path.dirname(__file__), "data/grapheme_break_property.json"), 'r') as f:
+with open(os.path.join(os.path.dirname(__file__), "data", "grapheme_break_property.json"), 'r') as f:
     data = json.load(f)
 
     assert len(data) == len(GraphemePropertyGroup) - 1

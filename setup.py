@@ -1,3 +1,4 @@
+import os
 from codecs import open as codecs_open
 from setuptools import setup, find_packages
 
@@ -5,6 +6,10 @@ from setuptools import setup, find_packages
 # Get the long description from the relevant file
 with codecs_open('README.rst', encoding='utf-8') as f:
     long_description = f.read()
+
+extra_files = []
+data_file = os.path.join('data', 'grapheme_break_property.json')
+extra_files.append(data_file)
 
 
 setup(name='grapheme',
@@ -18,6 +23,7 @@ setup(name='grapheme',
       license='MIT',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
+      package_data={'': extra_files},
       zip_safe=False,
       install_requires=[],
       extras_require={
